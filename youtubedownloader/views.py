@@ -1,6 +1,5 @@
 import os
 import uuid
-import ffmpeg
 from django.http import HttpResponse, HttpResponseBadRequest
 from pytube import YouTube
 from mediadownloaderbot.utils import (
@@ -43,8 +42,5 @@ def download_video_at_highest_quality(request, base64_video_url):
             os.path.join(output_path, f"{make_safe_filename(yt.title)}.mp4"),
         )
         return HttpResponse(request, "Descarga completada exitosamente.")
-    except ffmpeg.Error as e:
-        print(f"FFmpeg error: {e.stderr.decode()}")
-        return
     except Exception as e:
         return HttpResponseBadRequest(f"Se produjo un error: {e}")
