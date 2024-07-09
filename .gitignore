@@ -2,7 +2,10 @@
 .venv/
 #vs code debug config
 .vscode/
-
+#media folder
+mediadownloaderbot/media/yt/audio/*
+mediadownloaderbot/media/yt/video/*
+mediadownloaderbot/media/yt/output/*
 ### OSX ###
 .DS_Store
 .AppleDouble
