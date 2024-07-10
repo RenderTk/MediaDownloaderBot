@@ -36,11 +36,36 @@ def download_video_at_highest_quality(request, base64_video_url):
             output_path=audio_path,
             filename=audio_filename,
         )
+        output_file_path = os.path.join(
+            output_path, f"{make_safe_filename(yt.title)}.mp4"
+        )
         merge_video_and_audio_from_files(
             os.path.join(video_path, video_filename),
             os.path.join(audio_path, audio_filename),
-            os.path.join(output_path, f"{make_safe_filename(yt.title)}.mp4"),
+            output_file_path,
         )
-        return HttpResponse(request, "Descarga completada exitosamente.")
+        return HttpResponse(output_file_path, content_type="text/plain")
+    except Exception as e:
+        return HttpResponseBadRequest(f"Se produjo un error: {e}")
+
+
+def download_audio_of_video_at_highest_quality(request, base64_video_url):
+    try:
+        url = decode_from_base64(base64_video_url)
+        yt = YouTube(url)
+        best_audio_stream = yt.streams.get_audio_only()
+        if best_audio_stream is None:
+            return HttpResponseBadRequest(
+                request, "No se encontró ningún video con ese link"
+            )
+        name = uuid.uuid4()
+        audio_filename = f"{name}.webm"
+        best_audio_stream.download(
+            output_path=audio_path,
+            filename=audio_filename,
+        )
+        return HttpResponse(
+            os.path.join(audio_path, audio_filename), content_type="text/plain"
+        )
     except Exception as e:
         return HttpResponseBadRequest(f"Se produjo un error: {e}")
