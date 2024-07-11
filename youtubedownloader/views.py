@@ -2,6 +2,7 @@ import os
 import uuid
 from django.http import HttpResponse, HttpResponseBadRequest
 from pytube import YouTube
+from pytube.exceptions import RegexMatchError
 from mediadownloaderbot.utils import (
     decode_from_base64,
     merge_video_and_audio_from_files,
@@ -45,8 +46,12 @@ def download_video_at_highest_quality(request, base64_video_url):
             output_file_path,
         )
         return HttpResponse(output_file_path, content_type="text/plain")
+    except RegexMatchError as e:
+        print("Excepcion: ", e)
+        return HttpResponseBadRequest(f"URL de youtube invalida")
     except Exception as e:
-        return HttpResponseBadRequest(f"Se produjo un error: {e}")
+        print("Excepcion: ", e)
+        return HttpResponseBadRequest(f"Se produjo un error")
 
 
 def download_audio_of_video_at_highest_quality(request, base64_video_url):
@@ -67,5 +72,9 @@ def download_audio_of_video_at_highest_quality(request, base64_video_url):
         return HttpResponse(
             os.path.join(audio_path, audio_filename), content_type="text/plain"
         )
+    except RegexMatchError as e:
+        print("Excepcion: ", e)
+        return HttpResponseBadRequest(f"URL de youtube invalida")
     except Exception as e:
-        return HttpResponseBadRequest(f"Se produjo un error: {e}")
+        print("Excepcion: ", e)
+        return HttpResponseBadRequest(f"Se produjo un error")

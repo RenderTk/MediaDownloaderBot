@@ -4,6 +4,12 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from utils import encode_to_base64
 
+DOWNLOAD_YT_VIDEO_BASE_URL = "http://127.0.0.1:9000/yt/download_video/"
+DOWNLOAD_YT_AUDIO_BASE_URL = "http://127.0.0.1:9000/yt/download_audio/"
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+}
+
 
 async def send_generic_message(
     update: Update, context: ContextTypes.DEFAULT_TYPE, text: str
@@ -13,7 +19,7 @@ async def send_generic_message(
 
 
 async def youtube_video_download(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, url: str
+    update: Update, context: ContextTypes.DEFAULT_TYPE, yt_video_url: str
 ):
     chat_id = 0
     if update.effective_chat is not None:
@@ -22,12 +28,9 @@ async def youtube_video_download(
         await send_generic_message(update, context, "Ha ocurrido un error")
         return
 
-    encoded_url = f"http://127.0.0.1:9000/yt/download_video/{encode_to_base64(url)}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-    }
+    encoded_url = f"{DOWNLOAD_YT_VIDEO_BASE_URL}{encode_to_base64(yt_video_url)}"
     async with aiohttp.ClientSession() as session:
-        async with session.get(encoded_url, headers=headers) as response:
+        async with session.get(encoded_url, headers=HEADERS) as response:
             if response.status == 200:
                 video_path = await response.text()
                 print(f"Sending file: {video_path}")
@@ -37,12 +40,12 @@ async def youtube_video_download(
             else:
                 error = await response.text()
                 await send_generic_message(
-                    update, context, f"Ha ocurrido un error {error}"
+                    update, context, f"Ha ocurrido un error: {error}"
                 )
 
 
 async def youtube_audio_download(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, url: str
+    update: Update, context: ContextTypes.DEFAULT_TYPE, yt_video_url: str
 ):
     chat_id = 0
     if update.effective_chat is not None:
@@ -51,12 +54,9 @@ async def youtube_audio_download(
         await send_generic_message(update, context, "Ha ocurrido un error")
         return
 
-    encoded_url = f"http://127.0.0.1:9000/yt/download_audio/{encode_to_base64(url)}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-    }
+    encoded_url = f"{DOWNLOAD_YT_AUDIO_BASE_URL}{encode_to_base64(yt_video_url)}"
     async with aiohttp.ClientSession() as session:
-        async with session.get(encoded_url, headers=headers) as response:
+        async with session.get(encoded_url, headers=HEADERS) as response:
             if response.status == 200:
                 audio_path = await response.text()
                 print(f"Sending file: {audio_path}")
@@ -66,5 +66,5 @@ async def youtube_audio_download(
             else:
                 error = await response.text()
                 await send_generic_message(
-                    update, context, f"Ha ocurrido un error {error}"
+                    update, context, f"Ha ocurrido un error: {error}"
                 )
