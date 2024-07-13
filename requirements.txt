@@ -3,3 +3,4 @@ pytube
 python-telegram-bot
 aiohttp
 python-dotenv
+instaloader

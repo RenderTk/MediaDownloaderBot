@@ -6,6 +6,7 @@ from utils import encode_to_base64
 
 DOWNLOAD_YT_VIDEO_BASE_URL = "http://127.0.0.1:9000/yt/download_video/"
 DOWNLOAD_YT_AUDIO_BASE_URL = "http://127.0.0.1:9000/yt/download_audio/"
+DOWNLOAD_IN_REEL_BASE_URL = "http://127.0.0.1:9000/in/download_video/"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 }
@@ -63,6 +64,31 @@ async def youtube_audio_download(
                 with open(audio_path, "rb") as audio_file:
                     await context.bot.send_audio(chat_id=chat_id, audio=audio_file)
                 os.remove(audio_path)
+            else:
+                error = await response.text()
+                await send_generic_message(
+                    update, context, f"Ha ocurrido un error: {error}"
+                )
+
+
+async def instagram_reel_download(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, in_reel_url: str
+):
+    chat_id = 0
+    if update.effective_chat is not None:
+        chat_id = update.effective_chat.id
+    else:
+        await send_generic_message(update, context, "Ha ocurrido un error")
+        return
+    encoded_url = f"{DOWNLOAD_IN_REEL_BASE_URL}{encode_to_base64(in_reel_url)}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(encoded_url, headers=HEADERS) as response:
+            if response.status == 200:
+                reel_video_path = await response.text()
+                print(f"Sending file: {reel_video_path}")
+                with open(reel_video_path, "rb") as video_file:
+                    await context.bot.send_video(chat_id=chat_id, video=video_file)
+                os.remove(reel_video_path)
             else:
                 error = await response.text()
                 await send_generic_message(

@@ -11,7 +11,11 @@ from telegram.ext import (
     filters,
     CallbackQueryHandler,
 )
-from bot_handlers import youtube_video_download, youtube_audio_download
+from bot_handlers import (
+    youtube_video_download,
+    youtube_audio_download,
+    instagram_reel_download,
+)
 
 # KEYS in context: ContextTypes.DEFAULT_TYPE
 key_to_video_url_key = 1  # para obtener la URL del video
@@ -61,8 +65,10 @@ async def handle_url(update, context):
         )
 
     elif command == "instagram":
-        # Logic for downloading Instagram video
-        print("instagram")
+        await context.bot.send_message(
+            update.effective_chat.id, "Enviandote el reel..."
+        )
+        await instagram_reel_download(update, context, in_reel_url=update.message.text)
     elif command == "tiktok":
         # Logic for downloading TikTok video
         print("tiktok")
@@ -116,7 +122,7 @@ async def instagram(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat is not None and context.user_data is not None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="Envia la URL del video de instagram.",
+            text="Envia la URL del reel de instagram.",
         )
         context.user_data["command"] = (
             "instagram"  # Guardar el comando para referencia posterior
