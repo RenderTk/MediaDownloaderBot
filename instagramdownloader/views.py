@@ -6,9 +6,19 @@ from mediadownloaderbot.utils import (
     output_path,
     decode_from_base64,
 )
+from dotenv import load_dotenv
 
+load_dotenv(".env")
 INSTAGRAM_SESSION_FILE = os.getenv("INSTAGRAM_SESSION_FILEPATH")
 INSTAGRAM_USERNAME = os.getenv("INSTAGRAM_USERNAME")
+ins = instaloader.Instaloader()
+try:
+    ins.load_session_from_file(
+        username=INSTAGRAM_USERNAME,
+        filename=INSTAGRAM_SESSION_FILE,
+    )
+except Exception as e:
+    raise Exception(f"Archivo de sesion de instagram no fue encontrado.: {e}")
 
 
 # Create your views here.
@@ -17,18 +27,7 @@ def hello(request):
 
 
 def download_video_at_highest_quality(request, base64_video_url):
-    ins = instaloader.Instaloader()
     video_url = decode_from_base64(base64_video_url)
-    # Login with sesision file
-    try:
-        ins.load_session_from_file(
-            username=INSTAGRAM_USERNAME,
-            filename=INSTAGRAM_SESSION_FILE,
-        )
-    except Exception:
-        return HttpResponseBadRequest(
-            "Archivo de sesion de instagram no fue encontrado."
-        )
     try:
         shortcode = video_url.split("/")[-2]
     except Exception as e:
