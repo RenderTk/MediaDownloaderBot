@@ -57,13 +57,13 @@ Este proyecto es un bot de Telegram que permite descargar videos y audios de You
 2. Ejecuta el script `import_instagram_firefox_session.py` para generar el archivo de sesion de Instagram:
 
 ```sh
-mediadownloaderboot/scripts/create_necessary_folders.py
+mediadownloaderbot/scripts/import_instagram_firefox_session.py
 ```
 
 3. Ejecuta el script `create_necessary_folders.py` para crear las carpetas necesarias en la estructura de tu proyecto:
 
 ```sh
-mediadownloaderboot/scripts/create_necessary_folders.py
+mediadownloaderbot/scripts/create_necessary_folders.py
 ```
 
 ### Crear archivo `.env`
