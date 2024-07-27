@@ -1,4 +1,10 @@
 from django.urls import path
 from tiktokdownloader import views
 
-urlpatterns = [path("hello/", views.hello)]
+urlpatterns = [
+    path("hello/", views.hello),
+    path(
+        "download_video/<str:base64_video_url>/",
+        views.download_video_at_highest_quality,
+    ),
+]

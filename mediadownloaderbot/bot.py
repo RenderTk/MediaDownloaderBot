@@ -14,6 +14,7 @@ from bot_handlers import (
     youtube_video_download,
     youtube_audio_download,
     instagram_reel_download,
+    tik_tok_download,
 )
 
 # KEYS in context: ContextTypes.DEFAULT_TYPE
@@ -69,8 +70,10 @@ async def handle_url(update, context):
         )
         await instagram_reel_download(update, context, in_reel_url=update.message.text)
     elif command == "tiktok":
-        # Logic for downloading TikTok video
-        print("tiktok")
+        await context.bot.send_message(
+            update.effective_chat.id, "Enviandote el tik tok..."
+        )
+        await tik_tok_download(update, context, tik_tok_url=update.message.text)
     else:
         await clean_bot_stuff(context)
         await context.bot.send_message(
@@ -147,7 +150,9 @@ def run_bot():
 
     if not BOT_TOKEN:
         raise ValueError("El token del bot no está configurada")
-    application = ApplicationBuilder().token(BOT_TOKEN).build()
+    application = (
+        ApplicationBuilder().token(BOT_TOKEN).read_timeout(30).write_timeout(30).build()
+    )
 
     youtube_handler = CommandHandler("youtube", youtube)
     instagram_handler = CommandHandler("instagram", instagram)
