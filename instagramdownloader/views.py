@@ -4,9 +4,12 @@ from django.http import HttpResponse, HttpResponseBadRequest
 import instaloader
 from mediadownloaderbot.utils import (
     output_path,
-    decode_from_base64,
+    encode_to_base64,
 )
 from dotenv import load_dotenv
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 load_dotenv(".env")
 INSTAGRAM_SESSION_FILE = os.getenv("INSTAGRAM_SESSION_FILEPATH")
@@ -26,19 +29,32 @@ def hello(request):
     return HttpResponse("Hello, this is a instagram downloader!")
 
 
-def download_video_at_highest_quality(request, base64_video_url):
-    video_url = decode_from_base64(base64_video_url)
+@api_view(["POST"])
+def download_video_at_highest_quality(request):
+    global ins
+    url = request.data.get("url", None)
+    if url is None:
+        return Response(
+            "No se ha proporcionado un url en la form data de la peticion",
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     try:
-        shortcode = video_url.split("/")[-2]
+        shortcode = url.split("/")[-2]
     except Exception as e:
-        return HttpResponseBadRequest("Url invalida.")
+        print("Excepcion: ", e)
+        return Response("Url invalida.", status=status.HTTP_400_BAD_REQUEST)
     try:
         post = instaloader.Post.from_shortcode(ins.context, shortcode)
-    except:
-        return HttpResponseBadRequest(f"URL de instagram reel invalida.")
+    except Exception as e:
+        print("Excepcion: ", e)
+        return Response(
+            f"URL de instagram reel invalida.", status=status.HTTP_400_BAD_REQUEST
+        )
 
-    video_url = post.video_url
+    url = post.video_url
     video_filename = str(uuid.uuid4())
     output_file_path = os.path.join(output_path, video_filename)
-    ins.download_pic(filename=output_file_path, url=video_url, mtime=post.date_utc)
-    return HttpResponse(f"{output_file_path}.mp4", content_type="text/plain")
+    ins.download_pic(filename=output_file_path, url=url, mtime=post.date_utc)
+    return Response(
+        encode_to_base64(f"{output_file_path}.mp4"), status=status.HTTP_200_OK
+    )

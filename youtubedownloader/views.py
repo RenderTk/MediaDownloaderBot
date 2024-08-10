@@ -4,11 +4,14 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from pytube import YouTube
 from pytube.exceptions import RegexMatchError
 from mediadownloaderbot.utils import (
-    decode_from_base64,
+    encode_to_base64,
     merge_video_and_audio_from_files,
     make_safe_filename,
 )
 from mediadownloaderbot.utils import video_path, audio_path, output_path
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 
 # Create your views here.
@@ -16,15 +19,23 @@ def hello(request):
     return HttpResponse("Hello, this is a youtube downloader!")
 
 
-def download_video_at_highest_quality(request, base64_video_url):
+@api_view(["POST"])
+def download_video_at_highest_quality(request):
     try:
-        url = decode_from_base64(base64_video_url)
+        url = request.data.get("url", None)
+        if url is None:
+            return Response(
+                "No se ha proporcionado un url en la form data de la peticion",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         yt = YouTube(url)
         best_video_stream = yt.streams.order_by("resolution").last()
         best_audio_stream = yt.streams.get_audio_only()
         if best_video_stream is None or best_audio_stream is None:
-            return HttpResponseBadRequest(
-                request, "No se encontró ningún video con ese link"
+            return Response(
+                request,
+                "No se encontró ningún video con ese link",
+                status=status.HTTP_400_BAD_REQUEST,
             )
         name = uuid.uuid4()
         video_filename = f"{name}.mp4"
@@ -45,23 +56,37 @@ def download_video_at_highest_quality(request, base64_video_url):
             os.path.join(audio_path, audio_filename),
             output_file_path,
         )
-        return HttpResponse(output_file_path, content_type="text/plain")
+        return Response(encode_to_base64(output_file_path), status=status.HTTP_200_OK)
     except RegexMatchError as e:
         print("Excepcion: ", e)
-        return HttpResponseBadRequest(f"URL de youtube invalida")
+        return Response(
+            "URL de youtube invalida",
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     except Exception as e:
         print("Excepcion: ", e)
-        return HttpResponseBadRequest(f"Se produjo un error")
+        return Response(
+            "Se produjo un error",
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
-def download_audio_of_video_at_highest_quality(request, base64_video_url):
+@api_view(["POST"])
+def download_audio_of_video_at_highest_quality(request):
     try:
-        url = decode_from_base64(base64_video_url)
+        url = request.data.get("url", None)
+        if url is None:
+            return Response(
+                "No se ha proporcionado un url en la form data de la peticion",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         yt = YouTube(url)
         best_audio_stream = yt.streams.get_audio_only()
         if best_audio_stream is None:
-            return HttpResponseBadRequest(
-                request, "No se encontró ningún video con ese link"
+            return Response(
+                request,
+                "No se encontró ningún video con ese link",
+                status=status.HTTP_400_BAD_REQUEST,
             )
         name = uuid.uuid4()
         audio_filename = f"{name}.webm"
@@ -69,12 +94,11 @@ def download_audio_of_video_at_highest_quality(request, base64_video_url):
             output_path=audio_path,
             filename=audio_filename,
         )
-        return HttpResponse(
-            os.path.join(audio_path, audio_filename), content_type="text/plain"
-        )
+        output_file_path = os.path.join(audio_path, audio_filename)
+        return Response(encode_to_base64(output_file_path), status=status.HTTP_200_OK)
     except RegexMatchError as e:
         print("Excepcion: ", e)
-        return HttpResponseBadRequest(f"URL de youtube invalida")
+        return Response(f"URL de youtube invalida", status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         print("Excepcion: ", e)
-        return HttpResponseBadRequest(f"Se produjo un error")
+        return Response(f"Se produjo un error", status=status.HTTP_400_BAD_REQUEST)

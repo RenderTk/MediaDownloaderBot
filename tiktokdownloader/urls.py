@@ -4,7 +4,7 @@ from tiktokdownloader import views
 urlpatterns = [
     path("hello/", views.hello),
     path(
-        "download_video/<str:base64_video_url>/",
+        "download_video/",
         views.download_video_at_highest_quality,
     ),
 ]

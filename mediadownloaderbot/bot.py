@@ -11,8 +11,7 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 from bot_handlers import (
-    youtube_video_download,
-    youtube_audio_download,
+    youtube_vido_or_audio_download,
     instagram_reel_download,
     tik_tok_download,
 )
@@ -94,13 +93,17 @@ async def youtube_button_options_click(update, context):
         await context.bot.send_message(
             update.effective_chat.id, "Enviandote el video..."
         )
-        await youtube_video_download(update, context, url_from_user_input)
+        await youtube_vido_or_audio_download(
+            update, context, url_from_user_input, "video"
+        )
     elif query.data == "youtube_audio":  # audio button
         await clean_bot_stuff(context)
         await context.bot.send_message(
             update.effective_chat.id, "Enviandote el audio..."
         )
-        await youtube_audio_download(update, context, url_from_user_input)
+        await youtube_vido_or_audio_download(
+            update, context, url_from_user_input, "audio"
+        )
     else:
         await context.bot.send_message(
             chat_id=query.message.chat_id, text="Opción no válida."
