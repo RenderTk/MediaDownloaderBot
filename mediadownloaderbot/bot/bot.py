@@ -15,9 +15,9 @@ from bot_utils import (
     key_to_yt_download_options_inline_keyboard_message_obj,
     BOT_TOKEN,
 )
-from mediadownloaderbot.bot.youtube_handler import youtube_vido_or_audio_download
-from mediadownloaderbot.bot.instagram_handler import instagram_reel_download
-from mediadownloaderbot.bot.tiktok_handler import tik_tok_download
+from youtube_handler import youtube_vido_or_audio_download
+from instagram_handler import instagram_reel_download
+from tiktok_handler import tik_tok_download
 
 
 async def clean_bot_stuff(context: ContextTypes.DEFAULT_TYPE):

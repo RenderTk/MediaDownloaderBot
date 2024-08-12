@@ -20,7 +20,7 @@ def save_tiktok_video(video_url, output_path, browser_name=None):
                 slidecount += 1
         else:
             regex_url = re.findall(url_regex, video_url)[0]
-            tt_video_url = tt_json['ItemModule'][video_id]['video']['downloadAddr']
+            tt_video_url = tt_json['ItemModule'][video_id]['video']['playAddr']
             headers['referer'] = 'https://www.tiktok.com/'
             # include cookies with the video request
             tt_video = requests.get(tt_video_url, allow_redirects=True, headers=headers, cookies=cookies)
@@ -31,7 +31,7 @@ def save_tiktok_video(video_url, output_path, browser_name=None):
     else:
         tt_json = alt_get_tiktok_json(video_url,browser_name)
         regex_url = re.findall(url_regex, video_url)[0]
-        tt_video_url = tt_json["__DEFAULT_SCOPE__"]['webapp.video-detail']['itemInfo']['itemStruct']['video']['downloadAddr']
+        tt_video_url = tt_json["__DEFAULT_SCOPE__"]['webapp.video-detail']['itemInfo']['itemStruct']['video']['playAddr']
         headers['referer'] = 'https://www.tiktok.com/'
         # include cookies with the video request
         tt_video = requests.get(tt_video_url, allow_redirects=True, headers=headers, cookies=cookies)
