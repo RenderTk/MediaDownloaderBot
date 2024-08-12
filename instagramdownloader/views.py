@@ -1,10 +1,10 @@
 import os
 import uuid
+import base64
 from django.http import HttpResponse, HttpResponseBadRequest
 import instaloader
 from mediadownloaderbot.utils import (
     output_path,
-    encode_to_base64,
 )
 from dotenv import load_dotenv
 from rest_framework.decorators import api_view
@@ -14,7 +14,13 @@ from rest_framework import status
 load_dotenv(".env")
 INSTAGRAM_SESSION_FILE = os.getenv("INSTAGRAM_SESSION_FILEPATH")
 INSTAGRAM_USERNAME = os.getenv("INSTAGRAM_USERNAME")
-ins = instaloader.Instaloader()
+ins = instaloader.Instaloader(
+    download_pictures=False,
+    download_video_thumbnails=False,
+    download_geotags=False,
+    save_metadata=False,
+    post_metadata_txt_pattern="",
+)
 try:
     ins.load_session_from_file(
         username=INSTAGRAM_USERNAME,
@@ -56,5 +62,6 @@ def download_video_at_highest_quality(request):
     output_file_path = os.path.join(output_path, video_filename)
     ins.download_pic(filename=output_file_path, url=url, mtime=post.date_utc)
     return Response(
-        encode_to_base64(f"{output_file_path}.mp4"), status=status.HTTP_200_OK
+        base64.b64encode(bytes(f"{output_file_path}.mp4", "utf-8")),
+        status=status.HTTP_200_OK,
     )

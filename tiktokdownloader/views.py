@@ -2,15 +2,17 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from mediadownloaderbot.utils import (
     output_path,
-    encode_to_base64,
 )
 import uuid, os
 import pyktok as pyk
+import base64
+import asyncio
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
 pyk.specify_browser("chrome")
+pyk.ms_token = "KZtyY-_PsQlddElwvxCJ8nu9oGUHgMK7J0_nbUqfug8SSsg6ywEyKtqdnqAmR-X66OXJBeFMjOYRpczqeHIT4YXKZ0JavyYhoQPSx-OkHwCkOof0aQaRhyN_DBChvQ0BzJWTxnjpgaKxGFwXmq7JCA=="
 
 
 # Create your views here.
@@ -29,9 +31,9 @@ def download_video_at_highest_quality(request):
     video_filename = str(uuid.uuid4())
     output_file_path = os.path.join(output_path, video_filename + ".mp4")
     try:
-        pyk.save_tiktok_video(url, output_file_path, "firefox")
+        pyk.save_tiktok_video(url, output_file_path, "chrome")
         return Response(
-            encode_to_base64(output_file_path),
+            base64.b64encode(bytes(output_file_path, "utf-8")),
             status=status.HTTP_200_OK,
             content_type="text/plain",
         )

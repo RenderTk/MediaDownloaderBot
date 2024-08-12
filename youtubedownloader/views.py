@@ -1,5 +1,6 @@
 import os
 import uuid
+import base64
 from django.http import HttpResponse, HttpResponseBadRequest
 from pytube import YouTube
 from pytube.exceptions import RegexMatchError
@@ -56,7 +57,10 @@ def download_video_at_highest_quality(request):
             os.path.join(audio_path, audio_filename),
             output_file_path,
         )
-        return Response(encode_to_base64(output_file_path), status=status.HTTP_200_OK)
+        return Response(
+            base64.b64encode(bytes(output_file_path, "utf-8")),
+            status=status.HTTP_200_OK,
+        )
     except RegexMatchError as e:
         print("Excepcion: ", e)
         return Response(

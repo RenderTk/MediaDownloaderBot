@@ -10,19 +10,14 @@ from telegram.ext import (
     filters,
     CallbackQueryHandler,
 )
-from bot_handlers import (
-    youtube_vido_or_audio_download,
-    instagram_reel_download,
-    tik_tok_download,
+from bot_utils import (
+    key_to_video_url_key,
+    key_to_yt_download_options_inline_keyboard_message_obj,
+    BOT_TOKEN,
 )
-
-# KEYS in context: ContextTypes.DEFAULT_TYPE
-key_to_video_url_key = 1  # para obtener la URL del video
-key_to_yt_download_options_inline_keyboard_message_obj = 2  # usada para interactuar con el mesnaje del keyboard generado en las opciones de descarga de yt
-
-
-load_dotenv(".env")
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+from mediadownloaderbot.bot.youtube_handler import youtube_vido_or_audio_download
+from mediadownloaderbot.bot.instagram_handler import instagram_reel_download
+from mediadownloaderbot.bot.tiktok_handler import tik_tok_download
 
 
 async def clean_bot_stuff(context: ContextTypes.DEFAULT_TYPE):
@@ -145,7 +140,7 @@ async def tiktok(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-def run_bot():
+def start():
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
@@ -172,4 +167,4 @@ def run_bot():
     application.run_polling()
 
 
-run_bot()
+start()
