@@ -25,25 +25,34 @@ Este proyecto es un bot de Telegram que permite descargar videos y audios de You
 
 #### Windows
 
-1. Descarga FFmpeg desde el sitio oficial: [FFmpeg Download](https://ffmpeg.org/download.html).
-2. Extrae el archivo descargado y mueve la carpeta a una ubicación permanente, por ejemplo, `C:\ffmpeg`.
-3. Agrega FFmpeg al PATH:
-    - Abre el Panel de Control y selecciona **Sistema**.
-    - Haz clic en **Configuración avanzada del sistema**.
-    - En la pestaña **Opciones avanzadas**, haz clic en **Variables de entorno**.
-    - En **Variables del sistema**, busca la variable `Path` y haz clic en **Editar**.
-    - Agrega la ruta `C:\ffmpeg\bin` y guarda los cambios.
+1. **Usando Chocolatey**:
+   - Abre el Símbolo del sistema o PowerShell como administrador.
+   - Instala FFmpeg ejecutando el siguiente comando:
+     ```sh
+     choco install ffmpeg
+     ```
+   - Chocolatey se encargará de la instalación y agregará FFmpeg automáticamente al PATH.
+
+   **Instalación Manual (si es necesario):**
+   - Descarga FFmpeg desde el sitio oficial: [FFmpeg Download](https://ffmpeg.org/download.html).
+   - Extrae el archivo descargado y mueve la carpeta a una ubicación permanente, por ejemplo, `C:\ffmpeg`.
+   - Agrega FFmpeg al PATH:
+     - Abre el Panel de Control y selecciona **Sistema**.
+     - Haz clic en **Configuración avanzada del sistema**.
+     - En la pestaña **Avanzado**, haz clic en **Variables de entorno**.
+     - En **Variables del sistema**, busca la variable `Path` y haz clic en **Editar**.
+     - Agrega la ruta `C:\ffmpeg\bin` y guarda los cambios.
 
 #### macOS
 
-1. Instala FFmpeg usando Homebrew:
+1. **Instala FFmpeg usando Homebrew**:
     ```sh
     brew install ffmpeg
     ```
 
 #### Linux
 
-1. Instala FFmpeg utilizando el gestor de paquetes de tu distribución. Por ejemplo, en Ubuntu:
+1. **Instala FFmpeg utilizando el gestor de paquetes de tu distribución. Por ejemplo, en Ubuntu**:
     ```sh
     sudo apt update
     sudo apt install ffmpeg
@@ -56,19 +65,19 @@ Este proyecto es un bot de Telegram que permite descargar videos y audios de You
 2. Ejecuta el script `import_instagram_firefox_session.py` para generar el archivo de sesion de Instagram:
 
 ```sh
-mediadownloaderboot/scripts/import_instagram_firefox_session.py
+mediadownloaderbot/scripts/import_instagram_firefox_session.py
 ```
 
 3. Ejecuta el script `create_necessary_folders.py` para crear las carpetas necesarias en la estructura de tu proyecto:
 
 ```sh
-mediadownloaderboot/scripts/create_necessary_folders.py
+mediadownloaderbot/scripts/create_necessary_folders.py
 ```
 
 4. Ejecuta el script `import_tik_tok_video_download_function.py` para importar función necesaria al paquete `pyktok`:
 
 ```sh
-mediadownloaderboot/scripts/import_tik_tok_video_download_function.py
+mediadownloaderbot/scripts/import_tik_tok_video_download_function.py
 ```
 
 ### Crear archivo `.env`
