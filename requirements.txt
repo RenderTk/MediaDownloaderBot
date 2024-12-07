@@ -1,7 +1,6 @@
-django
 pytube
+pytubefix
 python-telegram-bot
-aiohttp
 python-dotenv
 instaloader
 pyktok
@@ -12,4 +11,4 @@ pandas
 requests
 streamlit
 TikTokApi
-djangorestframework
+tiktok-dl
