@@ -7,7 +7,7 @@ TIK_TOK_MS_TOKEN = os.getenv("TIK_TOK_MS_TOKEN")
 
 
 async def download_async(url, output_path=OUTPUT_PATH):
-    """NEED to run py -m playwright install to work"""
+    """NEED to run py -m playwright install also firefox to work"""
     async with TikTokApi() as api:
         await api.create_sessions(
             ms_tokens=[TIK_TOK_MS_TOKEN], num_sessions=1, sleep_after=3

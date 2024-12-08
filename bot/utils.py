@@ -1,7 +1,3 @@
-import string
-import unicodedata
-import subprocess
-import os
 from telegram import Update
 from telegram.ext import ContextTypes
 
