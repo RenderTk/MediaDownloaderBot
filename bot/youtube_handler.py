@@ -23,5 +23,7 @@ async def youtube_vido_or_audio_download(
         file_path = await youtube_downloader.download_audio_async(yt_url)
     print(f"Sending file: {file_path}")
     with open(file_path, "rb") as video_file:
-        await context.bot.send_video(chat_id=chat_id, video=video_file)
+        await context.bot.send_video(
+            chat_id=chat_id, video=video_file, caption="Youtube"
+        )
     os.remove(file_path)

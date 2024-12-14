@@ -18,5 +18,7 @@ async def tik_tok_download(
     tik_tok_video_path = await tik_tok_downloader.download_async(tik_tok_url)
     print(f"Sending file: {tik_tok_video_path}")
     with open(tik_tok_video_path, "rb") as video_file:
-        await context.bot.send_video(chat_id=chat_id, video=video_file)
+        await context.bot.send_video(
+            chat_id=chat_id, video=video_file, caption="TikTok"
+        )
     os.remove(tik_tok_video_path)

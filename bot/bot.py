@@ -11,12 +11,11 @@ from telegram.ext import (
 from .utils import (
     KEY_TO_VIDEO_URL_KEY,
     KEY_TO_YT_DOWNLOAD_OPTIONS_INLINE_KEYBOARD_MESSAGE_OBJ,
+    BOT_TOKEN,
 )
 from .youtube_handler import youtube_vido_or_audio_download
 from .instagram_handler import instagram_reel_download
 from .tiktok_handler import tik_tok_download
-
-BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 async def clean_bot_stuff(context: ContextTypes.DEFAULT_TYPE):
@@ -169,7 +168,11 @@ def start():
     if not BOT_TOKEN:
         raise ValueError("El token del bot no está configurada")
     application = (
-        ApplicationBuilder().token(BOT_TOKEN).read_timeout(30).write_timeout(30).build()
+        ApplicationBuilder()
+        .token(BOT_TOKEN)
+        .read_timeout(360)
+        .write_timeout(360)
+        .build()
     )
 
     youtube_handler = CommandHandler("youtube", youtube)

@@ -1,5 +1,10 @@
-from bot.bot import start
 from dotenv import load_dotenv
 
-load_dotenv(".env", override=True)
+load_dotenv()
+
+
+from downloader import utils
+from bot import utils
+from bot.bot import start
+
 start()

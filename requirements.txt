@@ -1,14 +1,15 @@
 pytube
 pytubefix
 python-telegram-bot
-python-dotenv
 instaloader
-pyktok
 beautifulsoup4
 browser-cookie3
 numpy
 pandas
 requests
 streamlit
+playwright
 TikTokApi
-tiktok-dl
+python-dotenv
+# pyktok
+# tiktok-dl

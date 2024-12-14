@@ -1,7 +1,7 @@
 import os, uuid
 import re
 from TikTokApi import TikTokApi
-from .utils import OUTPUT_PATH
+from .utils import OUTPUT_PATH, TIK_TOK_MS_TOKEN
 
 TIK_TOK_MS_TOKEN = os.getenv("TIK_TOK_MS_TOKEN")
 
