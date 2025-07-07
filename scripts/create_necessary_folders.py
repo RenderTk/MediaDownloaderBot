@@ -6,10 +6,7 @@ base_dir = os.path.dirname(current_dir)
 
 # Directorios a crear
 directories = [
-    "media/audio",
-    "media/video",
-    "media/output",
-    "media/instagram_session",
+    "media/",
 ]
 
 # Iterar sobre los directorios y crearlos si no existen

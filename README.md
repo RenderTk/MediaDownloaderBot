@@ -65,14 +65,6 @@ Ejecuta:
 python3 scripts/create_necessary_folders.py
 ```
 
-### Configurar Instagram
-1. Inicia sesión en Instagram usando Firefox.
-2. Ejecuta:
-   ```bash
-   python3 scripts/import_instagram_firefox_session.py
-   ```
-   Esto generará un archivo de sesión. Guarda su ruta.
-
 ### Configurar TikTok
 1. Accede a [tiktok.com](https://tiktok.com) e identifica el **MS_TOKEN**.
 2. Usa una extensión como `Cookie-Editor` para extraerlo.
@@ -85,8 +77,6 @@ Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
 ```env
 BOT_TOKEN=tu_bot_token_aqui
-INSTAGRAM_USERNAME=tu_usuario_de_instagram
-INSTAGRAM_SESSION_FILEPATH=ruta_al_archivo_de_sesion
 TIK_TOK_MS_TOKEN=tu_ms_token
 ```
 
@@ -94,8 +84,6 @@ TIK_TOK_MS_TOKEN=tu_ms_token
 
 ```env
 BOT_TOKEN=1234567890:ABCDEFGH-TuTokenDeBotAqui
-INSTAGRAM_USERNAME=mi_usuario
-INSTAGRAM_SESSION_FILEPATH=/home/tu_usuario/rutas/instagram_session.json
 TIK_TOK_MS_TOKEN=abc123456789xyz
 ```
 

@@ -18,9 +18,9 @@ async def youtube_vido_or_audio_download(
 
     file_path = ""
     if filetype == "video":
-        file_path = await youtube_downloader.download_video_async(yt_url)
+        file_path = youtube_downloader.download_youtube_video(yt_url)
     elif filetype == "audio":
-        file_path = await youtube_downloader.download_audio_async(yt_url)
+        file_path = youtube_downloader.download_youtube_audio(yt_url)
     print(f"Sending file: {file_path}")
     with open(file_path, "rb") as video_file:
         await context.bot.send_video(
