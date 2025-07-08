@@ -1,6 +1,5 @@
 import os, yt_dlp, uuid
-
-OUTPUT_PATH = os.getenv("OUTPUT_PATH")
+from .utils import OUTPUT_PATH
 
 
 def download_tiktok(url: str):

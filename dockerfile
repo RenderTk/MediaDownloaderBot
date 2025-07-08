@@ -1,37 +1,32 @@
-FROM fedora:41
+FROM python:3.12.11-alpine3.22
 
-# Install necessary packages
-RUN dnf update -y && \
-    dnf install -y firefox ffmpeg && \
-    dnf install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel libpcap-devel xz-devel expat-devel gcc g++ && \
-    dnf install -y python3 python3-pip python3-devel
+# Install system dependencies (if needed for your requirements)
+RUN apk add --no-cache ffmpeg
 
-# Create a non-root user and group
-RUN groupadd -r app && \
-    useradd -r -g app -m app
+# Create non-root user
+RUN addgroup -S app && adduser -S -G app app
 
-# Switch to the non-root user
-USER app
+# Set working directory
+WORKDIR /app
 
-# Set the working directory
-WORKDIR /app/
+# Create media directory with proper permissions
+RUN mkdir -p /app/media && chown -R app:app /app
 
-# Install Playwright
-RUN pip3 install --upgrade pip && \
-    pip3 install playwright && \
-    python3 -m playwright install
-
-# Copy requirements file
+# Copy requirements first (for better Docker layer caching)
 COPY requirements.txt .
 
+# Switch to non-root user before installing packages
+USER app
+
 # Install Python dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir --user -r requirements.txt
+
 
 # Copy application code
-COPY . .
+COPY --chown=app:app . .
 
-# Create necessary folders
-RUN python3 scripts/create_necessary_folders.py
+# Expose port
+EXPOSE 8002
 
-# Define the entry point
-ENTRYPOINT [ "python3", "app.py" ]
+# Use CMD instead of ENTRYPOINT for easier overriding
+CMD ["python3", "app.py"]

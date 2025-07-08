@@ -7,7 +7,6 @@ OUTPUT_PATH = os.path.join(os.getcwd(), "media")
 
 
 def create_media_dir():
-    os.makedirs(OUTPUT_PATH, exist_ok=True)
     os.environ["OUTPUT_PATH"] = OUTPUT_PATH
     return OUTPUT_PATH
 

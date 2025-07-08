@@ -1,6 +1,5 @@
 import os, uuid, yt_dlp
-
-OUTPUT_PATH = os.getenv("OUTPUT_PATH")
+from .utils import OUTPUT_PATH
 
 
 def download_reel(

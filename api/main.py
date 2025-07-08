@@ -119,6 +119,11 @@ async def youtube(
         print(f"Download error: {e}")
 
 
+@app.get("/health_check")
+async def health_check() -> dict[str, str]:
+    return {"status": "ok"}
+
+
 async def start_api_async():
     config = uvicorn.Config(app, host="0.0.0.0", port=8002, reload=False)
     server = uvicorn.Server(config)
