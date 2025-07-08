@@ -9,6 +9,8 @@ from fastapi.responses import FileResponse
 
 
 app = FastAPI()
+API_HOST = os.getenv("API_HOST", "0.0.0.0")
+API_PORT = int(os.getenv("API_PORT", 8002))
 
 
 class FileType(str, enum.Enum):
@@ -125,6 +127,6 @@ async def health_check() -> dict[str, str]:
 
 
 async def start_api_async():
-    config = uvicorn.Config(app, host="0.0.0.0", port=8002, reload=False)
+    config = uvicorn.Config(app, host=API_HOST, port=API_PORT, reload=False)
     server = uvicorn.Server(config)
     await server.serve()

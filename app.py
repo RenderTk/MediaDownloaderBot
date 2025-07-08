@@ -13,7 +13,7 @@ def create_media_dir():
 
 async def main():
     create_media_dir()
-    load_dotenv()
+    load_dotenv(override=True)
     await asyncio.gather(
         start_bot_async(),
         start_api_async(),

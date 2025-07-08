@@ -1,99 +1,117 @@
 # Media Downloader Bot
 
-Este proyecto es un bot de Telegram que permite descargar videos y audios de YouTube, entre otras plataformas.
+Un bot de Telegram que permite descargar videos y audios de múltiples plataformas de redes sociales, con API REST incluida y soporte completo para despliegue en Docker.
 
-## Funcionalidades
-- Descargar videos y audios de YouTube.
-- Soporte para descargas desde Instagram y TikTok.
+## 🚀 Funcionalidades
 
----
+- **Descargas de YouTube**: Videos y audios en la máxima calidad
+- **Soporte multi-plataforma**: Instagram y TikTok 
+- **API REST**: Endpoint HTTP para integración con otros servicios
+- **Despliegue en Docker**: Configuración completa para contenedores
+- **Interfaz de Telegram**: Bot interactivo y fácil de usar
+- **App móvil**: Aplicación móvil que se integra con la API REST
 
-## Requisitos
+## 📋 Requisitos
 
-1. **Python 3.x**: Asegúrate de tener instalada una versión reciente de Python.
-2. **Librerías necesarias**: Todas las dependencias están especificadas en `requirements.txt`.
-3. **Firefox**: Instala el navegador web Firefox.
-4. **FFmpeg**: Una herramienta para manejar archivos multimedia. Es necesario instalarla y agregarla al PATH.
-5. **Playwright**: Si las descargas de TikTok presentan errores, ejecuta el siguiente comando:
-   ```bash
-   py -m playwright install
-   ```
+### Software Base
+- **Python 3.8+**: Versión mínima recomendada
+- **Docker** (opcional): Para despliegue en contenedores
+- **FFmpeg**: Debe estar instalado y disponible en el PATH del sistema
 
----
+### Dependencias
+Todas las librerías de Python están especificadas en `requirements.txt` y se instalan automáticamente.
 
-## Instalación de FFmpeg
+## 🔧 Configuración
 
-### Windows
+### Variables de Entorno
 
-#### Usando Chocolatey
-1. Abre el Símbolo del sistema o PowerShell como administrador.
-2. Instala FFmpeg ejecutando:
-   ```bash
-   choco install ffmpeg
-   ```
-   Chocolatey se encargará de la instalación y configurará el PATH automáticamente.
-
-#### Instalación Manual
-1. Descarga FFmpeg desde el sitio oficial: [FFmpeg Download](https://ffmpeg.org/download.html).
-2. Extrae el archivo descargado y mueve la carpeta a una ubicación como `C:\ffmpeg`.
-3. Agrega FFmpeg al PATH:
-   - Abre **Panel de Control** y selecciona **Sistema**.
-   - Haz clic en **Configuración avanzada del sistema**.
-   - En la pestaña **Avanzado**, selecciona **Variables de entorno**.
-   - Busca la variable `Path` en **Variables del sistema** y haz clic en **Editar**.
-   - Agrega `C:\ffmpeg\bin` y guarda los cambios.
-
-### macOS
-Instala FFmpeg con Homebrew:
-```bash
-brew install ffmpeg
-```
-
-### Linux
-Usa el gestor de paquetes de tu distribución. Por ejemplo, en Fedora:
-```bash
-sudo dnf install ffmpeg
-```
-
----
-
-## Configuración
-
-### Crear carpetas necesarias
-Ejecuta:
-```bash
-python3 scripts/create_necessary_folders.py
-```
-
-### Configurar TikTok
-1. Accede a [tiktok.com](https://tiktok.com) e identifica el **MS_TOKEN**.
-2. Usa una extensión como `Cookie-Editor` para extraerlo.
-
----
-
-## Crear archivo `.env`
-
-Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
+Crea un archivo `.env` en el directorio raíz con las siguientes variables:
 
 ```env
-BOT_TOKEN=tu_bot_token_aqui
-TIK_TOK_MS_TOKEN=tu_ms_token
+# Token del bot de Telegram
+BOT_TOKEN=tu_token_de_telegram_aqui (Requerido)
+
+# Configuración del API (Opcional)
+API_HOST=0.0.0.0
+API_PORT=8002
 ```
 
-### Ejemplo de archivo `.env` completo:
+### Obtener Token de Telegram
 
-```env
-BOT_TOKEN=1234567890:ABCDEFGH-TuTokenDeBotAqui
-TIK_TOK_MS_TOKEN=abc123456789xyz
-```
+1. Abre Telegram y busca [@BotFather](https://t.me/BotFather)
+2. Envía `/newbot` y sigue las instrucciones
+3. Guarda el token proporcionado en tu archivo `.env`
 
----
+## 🚀 Despliegue
 
-## Ejecución
-En la ruta del proyecto, ejecuta:
+### Desarrollo Local
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/tu-usuario/media-downloader-bot.git
+   cd media-downloader-bot
+   ```
+
+2. **Instalar dependencias**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configurar variables de entorno**
+   ```bash
+   cp .env.example .env
+   # Editar .env con tus valores
+   ```
+
+4. **Ejecutar el bot**
+   ```bash
+   python3 app.py
+   ```
+
+### Despliegue con Docker
+
+#### Construir la imagen
 ```bash
-python3 app.py
+docker build -t media-downloader-bot .
 ```
+
+#### Ejecutar el contenedor
+```bash
+docker run -d \
+  --name mdw-bot \
+  --restart always \
+  -e BOT_TOKEN=tu_token_aqui \
+  -e API_PORT=8002 \
+  -p 8002:8002 \
+  media-downloader-bot
+```
+
+## 📚 Uso
+
+### Bot de Telegram
+1. Busca tu bot en Telegram usando su username
+2. Envía `/start` para comenzar
+3. Envía `/youtube`, `/instagram` o `/tiktok`
+4. Envía un enlace de YouTube, Instagram o TikTok
+5. Selecciona el formato deseado (video/audio)
+6. Descarga el archivo
+
+### API REST
+
+#### Endpoints disponibles
+- `GET /health_check` - Estado del servicio
+- `GET /youtube?file_type="video o audio"&url="Url del video"`
+- `GET /instagram?url="Url del video"` 
+- `GET /tiktok?url="Url del video"`
+
+## 📱 App Móvil
+
+Para una experiencia más completa, también está disponible una aplicación móvil que se integra con la API REST de este bot:
+
+**Repositorio**: [FdDownloaderApp](https://github.com/RenderTk/FdDownloaderApp.git)
+
+La app móvil permite usar todas las funcionalidades del bot desde una interfaz nativa para dispositivos móviles.
 
 ---
 
+**⚠️ Disclaimer**: Este bot es para uso educativo y personal. Respeta los términos de servicio de las plataformas y las leyes de derechos de autor de tu jurisdicción.
