@@ -1,10 +1,25 @@
+import asyncio, os
 from dotenv import load_dotenv
+from bot.bot import start_bot_async
+from api.main import start_api_async
 
-load_dotenv()
+OUTPUT_PATH = os.path.join(os.getcwd(), "media")
 
 
-from downloader import utils
-from bot import utils
-from bot.bot import start
+def create_media_dir():
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
+    os.environ["OUTPUT_PATH"] = OUTPUT_PATH
+    return OUTPUT_PATH
 
-start()
+
+async def main():
+    create_media_dir()
+    load_dotenv()
+    await asyncio.gather(
+        start_bot_async(),
+        start_api_async(),
+    )
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

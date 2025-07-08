@@ -15,7 +15,7 @@ async def tik_tok_download(
         await send_generic_message(update, context, "Ha ocurrido un error")
         return
 
-    tik_tok_video_path = tik_tok_downloader.download(tik_tok_url)
+    tik_tok_video_path = tik_tok_downloader.download_tiktok(tik_tok_url)
     print(f"Sending file: {tik_tok_video_path}")
     with open(tik_tok_video_path, "rb") as video_file:
         await context.bot.send_video(

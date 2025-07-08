@@ -1,8 +1,11 @@
 import os, yt_dlp, uuid
-from .utils import OUTPUT_PATH
 
-def download(url: str, output_path=OUTPUT_PATH):
-    video_file_path = os.path.join(output_path, str(uuid.uuid4()) + ".mp4")
+OUTPUT_PATH = os.getenv("OUTPUT_PATH")
+
+
+def download_tiktok(url: str):
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
+    video_file_path = os.path.join(OUTPUT_PATH, str(uuid.uuid4()) + ".mp4")
     ydl_opts = {
         "outtmpl": video_file_path,
         "quiet": False,

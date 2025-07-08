@@ -15,7 +15,7 @@ async def instagram_reel_download(
         await send_generic_message(update, context, "Ha ocurrido un error")
         return
 
-    reel_video_path = instagram_downloader.download(in_reel_url)
+    reel_video_path = instagram_downloader.download_reel(in_reel_url)
     print(f"Sending file: {reel_video_path}")
     with open(reel_video_path, "rb") as video_file:
         await context.bot.send_video(chat_id=chat_id, video=video_file, caption="Reel")

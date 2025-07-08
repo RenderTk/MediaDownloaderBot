@@ -6,7 +6,7 @@ from telegram.ext import (
     CommandHandler,
     MessageHandler,
     CallbackQueryHandler,
-    filters
+    filters,
 )
 from .utils import (
     KEY_TO_VIDEO_URL_KEY,
@@ -159,14 +159,15 @@ async def tiktok(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-def start():
+async def start_bot_async():
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO,
     )
 
     if not BOT_TOKEN:
-        raise ValueError("El token del bot no está configurada")
+        raise ValueError("El token del bot no está configurado")
+
     application = (
         ApplicationBuilder()
         .token(BOT_TOKEN)
@@ -175,19 +176,15 @@ def start():
         .build()
     )
 
-    youtube_handler = CommandHandler("youtube", youtube)
-    instagram_handler = CommandHandler("instagram", instagram)
-    tiktok_handler = CommandHandler("tiktok", tiktok)
-    application.add_handler(youtube_handler)
-    application.add_handler(instagram_handler)
-    application.add_handler(tiktok_handler)
-
-    # Manejador para recibir la las interacciones de butones de yt
+    # Add handlers
+    application.add_handler(CommandHandler("youtube", youtube))
+    application.add_handler(CommandHandler("instagram", instagram))
+    application.add_handler(CommandHandler("tiktok", tiktok))
     application.add_handler(CallbackQueryHandler(youtube_button_options_click))
-
-    # Manejador para recibir la URL después del comando
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url))
-    application.run_polling()
 
-
-start()
+    # ✅ This is all you need now (fully async)
+    await application.initialize()
+    await application.start()
+    # Start polling manually
+    await application.updater.start_polling()
